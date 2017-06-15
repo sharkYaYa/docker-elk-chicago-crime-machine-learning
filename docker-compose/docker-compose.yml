@@ -19,7 +19,21 @@ services:
       cluster.name: "ChicagoInfo"
     networks:
       - elk
-
+  
+  neo4j:
+    image: neo4j:3.2.1          ## we use neo4j v3
+    environment:
+      - NEO4J_AUTH=neo4j/whatAstupid # configure the instance with custom username/password
+      - NEO4J_HEAP_MEMORY=2048 # configure the heap memory
+      - NEO4J_CACHE_MEMORY=1G # configure the cache memory
+    ports:                    ## publish ports to have Web UI & BOLT
+      - "7474:7474"
+      - "7687:7687"
+    volumes:                  ## adds folder with login/password
+    - ./neo4j/data:/data
+    - ./neo4j/logs:/logs
+    networks:
+      - elk
   # logstash:
   #   build: logstash/
   #   volumes:
