@@ -1,0 +1,63 @@
+version: '2'
+services:
+  elasticsearch1:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.4.0
+    container_name: elasticsearch1
+    environment:
+      - cluster.name=chicago-info
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 2g
+    volumes:
+      - ./es1/esdata1:/usr/share/elasticsearch/data
+      - ./es1/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - esnet
+  elasticsearch2:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.4.0
+    container_name: elasticsearch2
+    environment:
+      - cluster.name=chicago-info
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+      - "discovery.zen.ping.unicast.hosts=elasticsearch1"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 2g
+    volumes:
+      - ./es2/esdata2:/usr/share/elasticsearch/data
+      - ./es2/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    networks:
+      - esnet 
+  kibana1:
+    image: docker.elastic.co/kibana/kibana:5.4.0
+    container_name: kibana1
+    volumes:
+      - ./k1/config/:/usr/share/kibana/config
+    ports:
+      - "5601:5601"
+    networks:
+      - esnet
+    depends_on:
+      - elasticsearch1
+      - elasticsearch2
+volumes:
+  esdata1:
+    driver: local
+  esdata2:
+    driver: local 
+
+#networks:
+#  esnet:
+networks:
+  esnet:
+    driver: bridge
