@@ -30,8 +30,8 @@ services:
       - "7474:7474"
       - "7687:7687"
     volumes:                  ## adds folder with login/password
-    - ./neo4j/data:/data
-    - ./neo4j/logs:/logs
+    - ./neo4j.3.2.1/data:/data
+    - ./neo4j.3.2.1/logs:/logs
     networks:
       - elk
   # logstash:
