@@ -190,7 +190,7 @@ public abstract class CrimeFeedParser {
 								+ bulkResponse.hasFailures());
 						bulkRequest = client.prepareBulk();
 					} catch (Exception e) {
-						System.out.println("1.] Error while closing the Elastic client !!!");
+						System.out.println("Error while closing the Elastic client !!!");
 						e.printStackTrace();
 					}
 				}
