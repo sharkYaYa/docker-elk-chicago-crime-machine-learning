@@ -1,9 +1,9 @@
 
-Run the latest version of the ELK (Elasticsearch, Logstash, Kibana) stack with Docker and Docker-compose.
+This is a simple project demostrating the data ingestion, extractions and APIs on top of Graphdatabase abd Elastic search. This demonstrate uses of the power of each tool and creates a data streams among graph(neo4j) and elastic to  ensure realtime updates.
 
-It will give you the ability to analyze any data set by using the searching/aggregation capabilities of Elasticsearch and the visualization power of Kibana.
+This stack empowers you with the ability to analyze any data set by using the searching/aggregation capabilities of Elasticsearch and the visualization power of Kibana as well as navigational/relattion analysis using neo4j.
 
-Based on the official images:
+The tools used in this project is based on the official docker images:
 
 * [elasticsearch](https://github.com/elastic/elasticsearch-docker)
 * [logstash](https://github.com/elastic/logstash-docker)
@@ -36,7 +36,7 @@ $ chcon -R system_u:object_r:admin_home_t:s0 docker-elk/
 
 # Usage
 
-Start the ELK stack using *docker-compose*:
+Start the ELK+Neo4j+Mongo stack using *docker-compose*:
 
 ```bash
 $ docker-compose up
@@ -47,6 +47,22 @@ You can also choose to run it in background (detached mode):
 ```bash
 $ docker-compose up -d
 ```
+
+Stop the ELK+Neo4j+Mongo stack using *docker-compose*:
+
+```bash
+$ docker-compose down
+```
+
+You can also choose to delete the volume:
+
+```bash
+$ docker-compose down -v
+```
+
+
+
+
 
 Now that the stack is running, you'll want to inject logs in it. The shipped Logstash configuration allows you to send content via TCP:
 
@@ -65,6 +81,13 @@ By default, the stack exposes the following ports:
 * 9200: Elasticsearch HTTP
 * 9300: Elasticsearch TCP transport
 * 5601: Kibana
+
+
+By default, the stack exposes the following urls:
+* 9200: Elasticsearch HTTP > [http://localhost:9200](http://localhost:9200)
+* 9300: Elasticsearch TCP transport > [http://localhost:9300](http://localhost:9300)
+* 5601: Kibana HTTP > [http://localhost:5601](http://localhost:5601)
+* 7474: Neo4j HTTP > [http://localhost:7474](http://localhost:7474)
 
 *WARNING*: If you're using *boot2docker*, you must access it via the *boot2docker* IP address instead of *localhost*.
 
