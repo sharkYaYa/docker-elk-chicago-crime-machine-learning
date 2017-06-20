@@ -33,7 +33,7 @@ services:
     - ./neo4j.3.2.1/data:/data
     - ./neo4j.3.2.1/logs:/logs
     - ./neo4j.3.2.1/plugins:/plugins
-    - ./neo4j.3.2.1/config:/config
+    - ./neo4j.3.2.1/conf:/conf
     networks:
       - elk
   # logstash:
