@@ -217,15 +217,13 @@ dbms.windows_service_name=neo4j
 #********************************************************************
 dbms.jvm.additional=-Dunsupported.dbms.udc.source=tarball
 
-
-dbms.unmanaged_extension_classes=org.sharkyaya.app=/unmanaged
-
 #********************************************************************
 # Elastic Neo4j river configuration
 #********************************************************************
-elasticsearch.host_name=http://elasticsearch:9200
+elasticsearch.host_name=http://localhost:9200
+elasticsearch.index_spec=people:Person(name), movie:Movie(title)
 
-#elasticsearch.index_spec=people:Person(name), movie:Movie(title)
-elasticsearch.index_spec=crime:Crime(caseNumber,caseDateTxt,updatedOnTxt,caseDate,updatedOn,fbiCode,arrest,latitude,longitude,xCordinate,yCordinate,description,iucr,district,communityArea,beat,ward,locDescription,domestic,primaryType,location)
-
-
+#********************************************************************
+#Comma separated list of JAXRS packages containing JAXRS Resource, one package name for each mountpoint.
+#********************************************************************
+dbms.unmanaged_extension_classes=org.sharkyaya.app=/data
