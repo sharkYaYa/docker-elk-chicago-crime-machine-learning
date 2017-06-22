@@ -4,11 +4,21 @@ import java.util.List;
 import java.util.Map;
 
 public class ElasticSearchIndexSettings {
+	
+	
+	static {
+		System.out.println("===============================================================================");
+		System.out.println("===================== Loading: ElasticSearchIndexSettings =========================");
+		System.out.println("===============================================================================");
+
+	}
+	
     private Map<String, List<ElasticSearchIndexSpec>> indexSpec;
     private boolean includeIDField;
     private boolean includeLabelsField;
 
     public ElasticSearchIndexSettings(Map indexSpec, boolean includeIDField, boolean includeLabelsField) {
+    	
     	this.indexSpec = indexSpec;
     	this.includeIDField = includeIDField;
     	this.includeLabelsField = includeLabelsField;

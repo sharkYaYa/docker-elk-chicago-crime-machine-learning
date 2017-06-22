@@ -4,6 +4,16 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 class ElasticSearchIndexSpec {
+	
+	
+	static {
+		System.out.println("===============================================================================");
+		System.out.println("===================== Loading: ElasticSearchIndexSpec =========================");
+		System.out.println("===============================================================================");
+
+	}
+	
+	
 
     private String indexName;
 	private Set<String> properties = new LinkedHashSet<String>();

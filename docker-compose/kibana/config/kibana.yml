@@ -10,14 +10,14 @@ elasticsearch.url: http://elasticsearch:9200
 # the username and password that the Kibana server uses to perform maintenance on the Kibana
 # index at startup. Your Kibana users still need to authenticate with Elasticsearch, which
 # is proxied through the Kibana server.
-elasticsearch.username: "elastic"
-elasticsearch.password: "changeme"
+#elasticsearch.username: "elastic"
+#elasticsearch.password: "changeme"
 
 ## Disable X-Pack
 ## see https://www.elastic.co/guide/en/x-pack/current/xpack-settings.html
 ##     https://www.elastic.co/guide/en/x-pack/current/installing-xpack.html#xpack-enabling
 #
-##xpack.security.enabled: false
+xpack.security.enabled: false
 ##xpack.monitoring.enabled: false
 ##xpack.ml.enabled: false
 ##xpack.graph.enabled: false

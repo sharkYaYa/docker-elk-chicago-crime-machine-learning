@@ -17,6 +17,15 @@ import org.neo4j.kernel.lifecycle.Lifecycle;
  * @since 06.02.13
  */
 public class ElasticSearchKernelExtensionFactory extends KernelExtensionFactory<ElasticSearchKernelExtensionFactory.Dependencies> {
+	
+	static {
+		System.out.println("===============================================================================");
+		System.out.println("===================== Loading: ElasticSearchKernelExtensionFactory =========================");
+		System.out.println("===============================================================================");
+
+	}
+	
+	
 
     public static final String SERVICE_NAME = "ELASTIC_SEARCH";
 

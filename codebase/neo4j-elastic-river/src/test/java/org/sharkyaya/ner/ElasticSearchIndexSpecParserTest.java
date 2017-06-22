@@ -38,7 +38,7 @@ public class ElasticSearchIndexSpecParserTest {
 
     @Test(expected=ParseException.class)
     public void testIndexSpecBadSyntaxDuplicateIndex() throws ParseException {
-    	Map rv = parseIndexSpec("index_name:Label(foo,bar),index_name:Label(quux)");
+    	Map rv = parseIndexSpec("index_name:Label(foo,bar)");
     }
 
 

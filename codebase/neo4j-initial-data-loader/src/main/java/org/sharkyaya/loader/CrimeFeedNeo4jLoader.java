@@ -5,27 +5,30 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.neo4j.graphdb.ConstraintViolationException;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.index.IndexManager;
 import org.sharkyaya.enums.Labels;
 import org.sharkyaya.enums.RelTypes;
 import org.sharkyaya.model.CrimeHeader;
-import org.sharkyaya.service.GraphDBService;
 
-public abstract class CrimeFeedNeo4jLoader {
+public class CrimeFeedNeo4jLoader {
 
 	
-	public void parseAndInsert(String fileWithPath) throws FileNotFoundException {
-		GraphDBService graphDBService = new GraphDBService();
-		GraphDatabaseService graphDb = graphDBService.getDBInstance();
+	public Map<String,Integer> parseAndInsert(String fileWithPath, GraphDatabaseService graphDb) throws FileNotFoundException {
+		//GraphDBService graphDBService = new GraphDBService();
+		//GraphDatabaseService graphDb = graphDBService.getDBInstance();
+		Map<String,Integer> resultMap = new HashMap<String,Integer>();
 		BufferedReader fileReader = new BufferedReader(new FileReader(new File(fileWithPath)));
 		int BATCHSIZE = 30000;
 		int count = 0;
@@ -33,6 +36,7 @@ public abstract class CrimeFeedNeo4jLoader {
 		CSVFormat csvFileFormat = CSVFormat.DEFAULT.withHeader(CrimeHeader.class);
 		
 		try(Transaction tx = graphDb.beginTx()){
+			
 			buildNeo4jSchemaIndex(graphDb);
 			tx.success();
 		}
@@ -61,6 +65,7 @@ public abstract class CrimeFeedNeo4jLoader {
 						tx = graphDb.beginTx();
 					}
 				}
+				resultMap.put("Result", count);
 				tx.success();
 				tx.close();
 			} catch (Exception e) {
@@ -92,7 +97,7 @@ public abstract class CrimeFeedNeo4jLoader {
 			}
 
 		}
-
+		return resultMap;
 	}
 
 	private void buildChicagoCrimeData(Map<String, String> map, GraphDatabaseService graphDb) {
@@ -138,13 +143,33 @@ public abstract class CrimeFeedNeo4jLoader {
 	}
 
 	private void buildNeo4jSchemaIndex(GraphDatabaseService graphDb) {
-		graphDb.schema().indexFor(Label.label(Labels.Crime.name())).on("id").create();
-		graphDb.schema().indexFor(Label.label(Labels.Beat.name())).on("id").create();
-		graphDb.schema().indexFor(Label.label(Labels.Location.name())).on("id").create();
-		graphDb.schema().indexFor(Label.label(Labels.CrimeType.name())).on("name").create();
-		graphDb.schema().indexFor(Label.label(Labels.CrimeType.name())).on("crimeType").create();
-		graphDb.schema().indexFor(Label.label(Labels.Location.name())).on("name").create();
-		graphDb.schema().indexFor(Label.label(Labels.SubCategory.name())).on("code").create();
+		IndexManager indexManager = graphDb.index();
+		boolean flag = indexManager.existsForNodes("id");
+		try{
+			if(!flag){
+				graphDb.schema().indexFor(Label.label(Labels.Crime.name())).on("id").create();
+				graphDb.schema().indexFor(Label.label(Labels.Beat.name())).on("id").create();
+				graphDb.schema().indexFor(Label.label(Labels.Location.name())).on("id").create();
+			}
+			flag = indexManager.existsForNodes("name");
+			if(!flag){
+				graphDb.schema().indexFor(Label.label(Labels.CrimeType.name())).on("name").create();
+				graphDb.schema().indexFor(Label.label(Labels.Location.name())).on("name").create();
+			}
+			flag = indexManager.existsForNodes("crimeType");
+			if(!flag){
+				graphDb.schema().indexFor(Label.label(Labels.CrimeType.name())).on("crimeType").create();
+			}
+			
+			flag = indexManager.existsForNodes("code");
+			if(!flag){
+				graphDb.schema().indexFor(Label.label(Labels.SubCategory.name())).on("code").create();
+			}
+		}catch(ConstraintViolationException c){
+			System.out.println("Index already exist !!!"+c);
+		}
+		
+		
 	}
 
 	private void buildCrimeLocationRel(GraphDatabaseService graphDb, Node crimeNode, Node locNode) {

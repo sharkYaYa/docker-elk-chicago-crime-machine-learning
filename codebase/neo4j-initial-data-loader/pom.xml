@@ -7,12 +7,27 @@
 	<name>chicago-crime-neo4j-initial-data-loader</name>
 	<url>https://github.com/sharkYaYa/docker-elk-chicago-crime.git</url>
 	<packaging>jar</packaging>
+
+	<properties>
+		<jdk.version>1.8</jdk.version>
+		<jodatime.version>2.5</jodatime.version>
+		<junit.version>4.12</junit.version>
+	</properties>
+
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>javax.ws.rs-api</artifactId>
+			<version>2.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -31,7 +46,7 @@
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>1.9.13</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-to-slf4j</artifactId>
@@ -39,31 +54,43 @@
 			<scope>runtime</scope>
 		</dependency>
 		<!-- add the x-pack jar as a dependency -->
-		
+
 		<!-- add the neo4j as a dependency -->
 		<dependency>
 			<groupId>org.neo4j</groupId>
 			<artifactId>neo4j-enterprise</artifactId>
 			<version>3.2.1</version>
+			
 		</dependency>
 	</dependencies>
+
+
 	<build>
 		<finalName>chicago-crime-elastic</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+				
+			</plugin>
+		</plugins>
 	</build>
-
-	<repositories>
-		<!-- add the elasticsearch repo -->
-		<repository>
-			<id>elasticsearch-releases</id>
-			<url>https://artifacts.elastic.co/maven</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-
 
 </project>

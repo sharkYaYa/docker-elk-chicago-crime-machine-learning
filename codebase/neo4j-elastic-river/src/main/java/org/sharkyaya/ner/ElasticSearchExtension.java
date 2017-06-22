@@ -15,6 +15,15 @@ import java.text.ParseException;
  * @since 25.04.15
  */
 public class ElasticSearchExtension extends LifecycleAdapter {
+	
+	static {
+		System.out.println("===============================================================================");
+		System.out.println("===================== Loading: ElasticSearchExtension =========================");
+		System.out.println("===============================================================================");
+
+	}
+	
+	
     private final GraphDatabaseService gds;
     private final static Logger logger = Logger.getLogger(ElasticSearchExtension.class.getName());
     private final String hostName;
@@ -34,6 +43,7 @@ public class ElasticSearchExtension extends LifecycleAdapter {
             }
             this.indexSettings = new ElasticSearchIndexSettings(iSpec, includeIDField, includeLabelsField);
         } catch (ParseException e) {
+        	e.printStackTrace();
             logger.severe("ElasticSearch Integration: Can't define index twice");
             enabled = false;
         }

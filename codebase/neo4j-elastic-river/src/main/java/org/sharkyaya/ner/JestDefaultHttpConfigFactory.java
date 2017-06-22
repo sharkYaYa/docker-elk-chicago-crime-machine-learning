@@ -18,6 +18,15 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.*;
 
 public class JestDefaultHttpConfigFactory {
+	
+	static {
+		System.out.println("===============================================================================");
+		System.out.println("===================== Loading: ElasticSearchKernelExtensionFactory =========================");
+		System.out.println("===============================================================================");
+
+	}
+	
+	
   public static HttpClientConfig getConfigFor(final String hostName, final Boolean discovery) throws URISyntaxException, GeneralSecurityException {
     HttpClientConfig.Builder clientConfig = new HttpClientConfig.Builder(hostName)
             .multiThreaded(true)

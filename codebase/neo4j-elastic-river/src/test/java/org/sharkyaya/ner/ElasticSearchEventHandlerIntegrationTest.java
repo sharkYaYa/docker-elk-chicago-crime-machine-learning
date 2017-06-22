@@ -63,6 +63,8 @@ public class ElasticSearchEventHandlerIntegrationTest {
 
     @Test
     public void testAfterCommit() throws Exception {
+    	try
+    	{
         Transaction tx = db.beginTx();
         org.neo4j.graphdb.Node node = db.createNode(Label.label(LABEL));
         String id = String.valueOf(node.getId());
@@ -84,5 +86,11 @@ public class ElasticSearchEventHandlerIntegrationTest {
         assertEquals(asList(LABEL), source.get("labels"));
         assertEquals(id, source.get("id"));
         assertEquals("foobar", source.get("foo"));
-    }
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    		throw e;
+    	}
+    	}
 }
